@@ -1,21 +1,21 @@
-# One Horizon Webhook Template for Cloudflare Workers
+# One Horizon webhook template for Cloudflare Workers
 
-A minimal TypeScript webhook receiver for One Horizon apps on Cloudflare Workers.
+Use this repo if you want a One Horizon webhook receiver on Cloudflare Workers. No Vercel, Netlify, or Heroku files.
 
 [![Deploy to Cloudflare](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/onehorizonai/webhook-template-cloudflare)
 
-## What You Get
+## Included
 
 - Worker at `src/worker.ts`
 - `/webhook` endpoint
-- Webhook key verification
-- JSON validation and 256 KB body limit
-- Retry-safe event ID handling
+- webhook key checks
+- JSON validation with a 256 KB limit
+- retry-safe event ID handling
 - Sample payloads
-- Optional SDK helper in `src/sdk.ts`
+- optional SDK helper in `src/sdk.ts`
 - `wrangler.jsonc`
 
-## Run Locally
+## Run locally
 
 ```bash
 yarn install
@@ -45,13 +45,13 @@ npx wrangler secret put ONE_WEBHOOK_KEY
 npx wrangler secret put ONE_API_KEY
 ```
 
-`ONE_API_KEY` is optional. Use it only for SDK follow-up calls.
+`ONE_API_KEY` is optional. Add it only if you use the SDK helper.
 
-## Production Notes
+## Before production
 
 - Keep `ONE_WEBHOOK_KEY` secret.
 - Return `2xx` quickly.
-- Store processed event IDs in KV, D1, Durable Objects, or another durable store before doing side effects.
+- Store event IDs in KV, D1, Durable Objects, or another durable store before doing side effects.
 - Queue slow work. One Horizon delivery requests time out after 3 seconds.
 
 ## Checks
