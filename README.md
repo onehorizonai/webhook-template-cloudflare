@@ -1,21 +1,20 @@
-# One Horizon webhook template for Cloudflare Workers
+# One Horizon webhooks on Cloudflare Workers
 
-Use this repo if you want a One Horizon webhook receiver on Cloudflare Workers. No Vercel, Netlify, or Heroku files.
+Clone this when your One Horizon app needs a webhook endpoint on Cloudflare Workers. It is only the Workers version: one Worker, one shared handler, no Node server or serverless provider config.
 
 [![Deploy to Cloudflare](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/onehorizonai/webhook-template-cloudflare)
 
-## Included
+## What is inside
 
-- Worker at `src/worker.ts`
-- `/webhook` endpoint
-- webhook key checks
-- JSON validation with a 256 KB limit
-- retry-safe event ID handling
-- Sample payloads
-- optional SDK helper in `src/sdk.ts`
-- `wrangler.jsonc`
+- `src/worker.ts`: the Cloudflare Worker
+- `src/webhook.ts`: key check, JSON parsing, event validation, idempotency hook
+- `wrangler.jsonc`: local dev and deploy config
+- `sample-payloads/`: example One Horizon events
+- `src/sdk.ts`: optional follow-up API calls
 
-## Run locally
+The endpoint accepts `HEAD`, `GET`, and JSON `POST` requests at `/webhook`.
+
+## Run it locally
 
 ```bash
 yarn install
@@ -33,12 +32,13 @@ curl http://localhost:8787/webhook \
   --data @sample-payloads/task-created.json
 ```
 
-## Configure One Horizon
+## Connect One Horizon
 
-1. Add your deployed `/webhook` URL in **Settings -> Apps**.
-2. Set `ONE_WEBHOOK_KEY` as a Cloudflare secret.
-3. Choose events.
-4. Click **Verify**.
+1. Deploy this repo to Cloudflare.
+2. Add `ONE_WEBHOOK_KEY` as a Worker secret.
+3. In One Horizon, open **Settings -> Apps**.
+4. Add the deployed `/webhook` URL.
+5. Pick events and click **Verify**.
 
 ```bash
 npx wrangler secret put ONE_WEBHOOK_KEY
@@ -47,12 +47,9 @@ npx wrangler secret put ONE_API_KEY
 
 `ONE_API_KEY` is optional. Add it only if you use the SDK helper.
 
-## Before production
+## Before you ship
 
-- Keep `ONE_WEBHOOK_KEY` secret.
-- Return `2xx` quickly.
-- Store event IDs in KV, D1, Durable Objects, or another durable store before doing side effects.
-- Queue slow work. One Horizon delivery requests time out after 3 seconds.
+The in-memory event store is for the template. Replace it with KV, D1, Durable Objects, or another durable store before doing side effects. Keep the response fast; One Horizon waits 3 seconds before timing out.
 
 ## Checks
 
