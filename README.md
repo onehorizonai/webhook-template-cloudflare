@@ -1,18 +1,18 @@
 # One Horizon webhooks on Cloudflare Workers
 
-Clone this when your One Horizon app needs a webhook endpoint on Cloudflare Workers. It is only the Workers version: one Worker, one shared handler, no Node server or serverless provider config.
+Cloudflare Workers version of the One Horizon webhook starter. Worker entrypoint, Wrangler config, no Node server files.
 
 [![Deploy to Cloudflare](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/onehorizonai/webhook-template-cloudflare)
 
-## What is inside
+## Files to look at
 
 - `src/worker.ts`: the Cloudflare Worker
-- `src/webhook.ts`: key check, JSON parsing, event validation, idempotency hook
+- `src/webhook.ts`: key check, JSON parsing, event validation, idempotency
 - `wrangler.jsonc`: local dev and deploy config
 - `sample-payloads/`: example One Horizon events
-- `src/sdk.ts`: optional follow-up API calls
+- `src/sdk.ts`: optional API calls after receiving an event
 
-The endpoint accepts `HEAD`, `GET`, and JSON `POST` requests at `/webhook`.
+The Worker accepts `HEAD`, `GET`, and JSON `POST` at `/webhook`.
 
 ## Run it locally
 
@@ -32,13 +32,14 @@ curl http://localhost:8787/webhook \
   --data @sample-payloads/task-created.json
 ```
 
-## Connect One Horizon
+## Connect it to One Horizon
 
 1. Deploy this repo to Cloudflare.
-2. Add `ONE_WEBHOOK_KEY` as a Worker secret.
+2. Set `ONE_WEBHOOK_KEY` as a Worker secret.
 3. In One Horizon, open **Settings -> Apps**.
 4. Add the deployed `/webhook` URL.
-5. Pick events and click **Verify**.
+5. Pick the events you want.
+6. Click **Verify**.
 
 ```bash
 npx wrangler secret put ONE_WEBHOOK_KEY
@@ -47,9 +48,9 @@ npx wrangler secret put ONE_API_KEY
 
 `ONE_API_KEY` is optional. Add it only if you use the SDK helper.
 
-## Before you ship
+## Replace before real use
 
-The in-memory event store is for the template. Replace it with KV, D1, Durable Objects, or another durable store before doing side effects. Keep the response fast; One Horizon waits 3 seconds before timing out.
+The event store is just memory. Before this does anything real, save processed event IDs in KV, D1, Durable Objects, or another durable store. Keep the handler quick; One Horizon times out after 3 seconds.
 
 ## Checks
 
