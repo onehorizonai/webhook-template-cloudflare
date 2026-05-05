@@ -1,30 +1,27 @@
 # One Horizon Webhook Template for Cloudflare Workers
 
-A small TypeScript webhook receiver for One Horizon apps on Cloudflare Workers. It checks the verification key, validates the event, logs the useful IDs, and returns quickly.
+A minimal TypeScript webhook receiver for One Horizon apps on Cloudflare Workers.
 
 [![Deploy to Cloudflare](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/onehorizonai/webhook-template-cloudflare)
 
-## What's included
+## What You Get
 
-- `/webhook` endpoint for One Horizon app events
-- Cloudflare Worker in `src/worker.ts`
-- `X-One-Webhook-Key` verification
-- `HEAD` and `GET` support for endpoint checks
-- JSON-only `POST` handling with a 256 KB payload limit
-- Basic validation for `one.webhook.event.v1`
-- A small idempotency hook so retries do not run the same work twice
+- Worker at `src/worker.ts`
+- `/webhook` endpoint
+- Webhook key verification
+- JSON validation and 256 KB body limit
+- Retry-safe event ID handling
+- Sample payloads
 - Optional SDK helper in `src/sdk.ts`
-- `wrangler.jsonc` for local development and deploys
+- `wrangler.jsonc`
 
-## Local setup
+## Run Locally
 
 ```bash
 yarn install
 cp .dev.vars.example .dev.vars
 yarn dev
 ```
-
-Send a sample event:
 
 ```bash
 curl http://localhost:8787/webhook \
@@ -38,41 +35,24 @@ curl http://localhost:8787/webhook \
 
 ## Configure One Horizon
 
-1. Open **Settings -> Apps** in One Horizon.
-2. Create or open a custom app.
-3. Add your deployed `/webhook` URL.
-4. Add the verification key to Cloudflare as the `ONE_WEBHOOK_KEY` secret.
-5. Choose the events your app should receive.
-6. Click **Verify**.
-
-Add production secrets with Wrangler:
+1. Add your deployed `/webhook` URL in **Settings -> Apps**.
+2. Set `ONE_WEBHOOK_KEY` as a Cloudflare secret.
+3. Choose events.
+4. Click **Verify**.
 
 ```bash
 npx wrangler secret put ONE_WEBHOOK_KEY
 npx wrangler secret put ONE_API_KEY
 ```
 
-`ONE_API_KEY` is optional. Skip it unless you call the SDK from your own handler code.
+`ONE_API_KEY` is optional. Use it only for SDK follow-up calls.
 
-When you do use the SDK helper, pass `env.ONE_API_KEY` from the Worker:
+## Production Notes
 
-```ts
-const task = await fetchRelatedTask(event, env.ONE_API_KEY)
-```
-
-## Handler flow
-
-The Worker only adapts the request. The webhook logic lives in `src/webhook.ts`.
-
-1. Check `X-One-Webhook-Key` with a timing-safe comparison.
-2. Accept `HEAD` and `GET` verification requests.
-3. Require `POST` requests to use `application/json`.
-4. Reject payloads larger than 256 KB.
-5. Validate the required event fields and schema.
-6. Skip duplicate event IDs with the configured event store.
-7. Log the event ID, type, resource, actor, and retry headers. Return `200`.
-
-The default event store is memory. That is fine for local testing. In production, use Workers KV, D1, Durable Objects, or another durable store keyed by event ID.
+- Keep `ONE_WEBHOOK_KEY` secret.
+- Return `2xx` quickly.
+- Store processed event IDs in KV, D1, Durable Objects, or another durable store before doing side effects.
+- Queue slow work. One Horizon delivery requests time out after 3 seconds.
 
 ## Checks
 
