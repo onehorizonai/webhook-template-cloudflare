@@ -1,0 +1,12 @@
+{
+  "$schema": "./node_modules/wrangler/config-schema.json",
+  "name": "one-horizon-webhook-template-cloudflare",
+  "main": "src/worker.ts",
+  "compatibility_date": "2026-05-05",
+  "secrets": {
+    "required": ["ONE_WEBHOOK_KEY"]
+  },
+  "observability": {
+    "enabled": true
+  }
+}
