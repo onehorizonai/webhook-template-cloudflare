@@ -2,14 +2,19 @@ import { describe, expect, it } from 'vitest'
 import worker from '../src/worker.js'
 
 const payload = {
+  specversion: '1.0',
   id: 'evt_worker_1',
   type: 'task.created',
-  schema: 'one.webhook.event.v1',
-  workspace_id: 'w_123',
-  created_at: '2026-05-05T12:00:00Z',
-  resource: { type: 'task', id: 'tsk_123', workspace_id: 'w_123' },
-  actor: { type: 'user', id: 'usr_123' },
-  data: {}
+  source: 'onehorizon/workspaces/w_123',
+  time: '2026-05-05T12:00:00Z',
+  datacontenttype: 'application/json',
+  subject: 'tsk_123',
+  workspaceid: 'w_123',
+  data: {
+    resource: { type: 'task', id: 'tsk_123', workspaceId: 'w_123' },
+    actor: { type: 'user', id: 'usr_123' },
+    task: { task: {} }
+  }
 }
 
 describe('Cloudflare Worker adapter', () => {
@@ -18,7 +23,7 @@ describe('Cloudflare Worker adapter', () => {
       new Request('https://example.com/webhook', {
         method: 'POST',
         headers: {
-          'content-type': 'application/json',
+          'content-type': 'application/cloudevents+json; charset=utf-8',
           'x-one-webhook-key': 'secret',
           'x-one-event-id': 'evt_worker_post'
         },

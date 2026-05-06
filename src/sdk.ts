@@ -10,7 +10,8 @@ export function createOneHorizonTasksClient(apiKey?: string): TasksApi | undefin
 }
 
 export async function fetchRelatedTask(event: OneHorizonWebhookEvent, apiKey?: string) {
-  const taskId = event.resource?.task_id || (event.resource?.type === 'task' ? event.resource.id : undefined)
+  const resource = event.data.resource
+  const taskId = resource.taskId || (resource.type === 'task' ? resource.id : undefined)
   const tasks = createOneHorizonTasksClient(apiKey)
 
   if (!tasks || !taskId) {
