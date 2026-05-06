@@ -54,10 +54,13 @@ curl http://localhost:8787/webhook \
 
 ```bash
 npx wrangler secret put ONE_WEBHOOK_KEY
-npx wrangler secret put ONE_API_KEY
 ```
 
-`ONE_API_KEY` is optional. Add it only if you use the SDK helper.
+`ONE_API_KEY` is not needed for deployment. Add it later only if you call the One Horizon SDK from your handler:
+
+```bash
+npx wrangler secret put ONE_API_KEY
+```
 
 ## Replace before real use
 
