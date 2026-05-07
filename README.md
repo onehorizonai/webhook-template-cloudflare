@@ -25,6 +25,9 @@ The Worker accepts `HEAD`, `GET`, and CloudEvents JSON `POST` at `/webhook`.
 npm i @onehorizon/sdk-js
 ```
 
+Webhook event and payload types come from `@onehorizon/sdk-js`. `src/types.ts`
+only keeps local adapter types for headers, logging, and responses.
+
 ## Run it locally
 
 Use Node 24. The repo includes `.nvmrc` and `.node-version`.

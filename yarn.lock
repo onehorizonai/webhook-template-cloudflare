@@ -481,10 +481,10 @@
     "@jridgewell/resolve-uri" "^3.0.3"
     "@jridgewell/sourcemap-codec" "^1.4.10"
 
-"@onehorizon/sdk-js@^1.1.0":
-  version "1.1.0"
-  resolved "https://registry.yarnpkg.com/@onehorizon/sdk-js/-/sdk-js-1.1.0.tgz#42b3e337385c20c969be865afd593aa83089d128"
-  integrity sha512-jnx1tijCHIuMOG18RB/nFRVlOo9JY/c/yrVsoIA3oKUt2k02dLnOqkPz6bf/zt9b6xGo0JRzwqZD4a9qmmcQMQ==
+"@onehorizon/sdk-js@^2.1.0":
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/@onehorizon/sdk-js/-/sdk-js-2.1.0.tgz#95cba03ad9cb76d5858322254a7fa7509a698317"
+  integrity sha512-xakE+PhHCXdN48Jnq50+pkRSBYkFeT55oKRnGc+Ia3mDg/za3LD5KC5sruJJyhENfG32D2LMDSe0aDA6xBZWzg==
 
 "@poppinss/colors@^4.1.5":
   version "4.1.6"
