@@ -1,6 +1,4 @@
-import { jsonResponse } from './http.js'
-import { handleWebhook, type WebhookEnv } from './webhook.js'
-import type { WebhookResponse } from './types.js'
+import { handleWebhookRequest, jsonResponse, toFetchResponse, type WebhookEnv } from './webhook.js'
 
 interface CloudflareEnv extends WebhookEnv {
   ONE_WEBHOOK_KEY?: string
@@ -11,24 +9,9 @@ export default {
   async fetch(request: Request, env: CloudflareEnv): Promise<Response> {
     const path = new URL(request.url).pathname
     if (path !== '/webhook') {
-      return toResponse(jsonResponse(404, { error: 'not found' }), request.method)
+      return toFetchResponse(jsonResponse(404, { error: 'not found' }), request.method)
     }
 
-    const result = await handleWebhook({
-      method: request.method,
-      headers: request.headers,
-      rawBody: request.method.toUpperCase() === 'POST' ? await request.arrayBuffer() : undefined,
-      env
-    })
-
-    return toResponse(result, request.method)
+    return handleWebhookRequest(request, { env })
   }
-}
-
-function toResponse(result: WebhookResponse, method: string): Response {
-  const body = method.toUpperCase() === 'HEAD' || result.body === undefined ? null : JSON.stringify(result.body)
-  return new Response(body, {
-    status: result.status,
-    headers: result.headers
-  })
 }

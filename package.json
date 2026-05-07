@@ -8,16 +8,17 @@
     "dev": "wrangler dev",
     "build": "tsc",
     "deploy": "wrangler deploy",
-    "test": "vitest run",
+    "test": "vitest run --dir test",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@onehorizon/sdk-js": "^2.1.0"
+    "@onehorizon/sdk-js": "^2.2.0"
   },
   "devDependencies": {
-    "@cloudflare/workers-types": "^4.20260504.0",
-    "typescript": "^5.9.0",
-    "vitest": "^3.2.0",
+    "@cloudflare/workers-types": "^4.20260507.1",
+    "typescript": "^6.0.3",
+    "vite": "^8.0.11",
+    "vitest": "^4.1.5",
     "wrangler": "^4.88.0"
   },
   "engines": {
