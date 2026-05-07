@@ -7,6 +7,7 @@ A small Cloudflare Worker that receives One Horizon app webhooks. It uses the On
 ## Files to look at
 
 - `src/worker.ts`: the Cloudflare Worker
+- `public/index.html`: the root deployment status page
 - `src/webhook.ts`: key check, CloudEvents JSON parsing, SDK event typing, idempotency
 - `wrangler.jsonc`: local dev and deploy config
 - `sample-payloads/`: example One Horizon events

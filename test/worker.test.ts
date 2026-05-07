@@ -62,8 +62,8 @@ describe('Cloudflare Worker adapter', () => {
     expect(response.status).toBe(204)
   })
 
-  it('rejects other paths', async () => {
-    const response = await worker.fetch(new Request('https://example.com/'), {})
+  it('rejects unknown worker paths', async () => {
+    const response = await worker.fetch(new Request('https://example.com/missing'), {})
 
     expect(response.status).toBe(404)
   })

@@ -3,6 +3,11 @@
   "name": "one-horizon-webhook-template-cloudflare",
   "main": "src/worker.ts",
   "compatibility_date": "2026-05-07",
+  "assets": {
+    "directory": "./public",
+    "binding": "ASSETS",
+    "run_worker_first": ["/webhook"]
+  },
   "secrets": {
     "required": ["ONE_WEBHOOK_KEY"]
   },
