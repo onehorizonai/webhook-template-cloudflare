@@ -11,7 +11,7 @@ A small Cloudflare Worker that receives One Horizon app webhooks. It uses the On
 - `src/webhook.ts`: key check, CloudEvents JSON parsing, SDK event typing, idempotency
 - `wrangler.jsonc`: local dev and deploy config
 - `sample-payloads/`: example One Horizon events
-- `src/sdk.ts`: optional follow-up call that loads the first document attached to the task
+- `src/sdk.ts`: optional `loadAttachedDocument` example using the One Horizon SDK
 
 The Worker accepts `HEAD`, `GET`, and CloudEvents JSON `POST` at `/webhook`.
 
@@ -61,7 +61,7 @@ curl http://localhost:8787/webhook \
 npx wrangler secret put ONE_WEBHOOK_KEY
 ```
 
-`ONE_API_KEY` is not needed for deployment. Add it later only if you call the One Horizon SDK from your handler, such as loading an attached document from `src/sdk.ts`:
+`ONE_API_KEY` is optional. Add it only when you use the SDK example in `src/sdk.ts`, such as loading a document attached to the task:
 
 ```bash
 npx wrangler secret put ONE_API_KEY
