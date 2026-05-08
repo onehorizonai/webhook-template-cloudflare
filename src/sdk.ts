@@ -1,25 +1,29 @@
-import { Configuration, TasksApi } from '@onehorizon/sdk-js'
+import { Configuration, DocumentsApi } from '@onehorizon/sdk-js'
 import type { WebhookEvent } from '@onehorizon/sdk-js'
 
-export function createOneHorizonTasksClient(apiKey?: string): TasksApi | undefined {
+export function createOneHorizonDocumentsClient(apiKey?: string): DocumentsApi | undefined {
   if (!apiKey) {
     return undefined
   }
 
-  return new TasksApi(new Configuration({ accessToken: apiKey }))
+  return new DocumentsApi(new Configuration({ accessToken: apiKey }))
 }
 
-export async function fetchRelatedTask(event: WebhookEvent, apiKey?: string) {
+export async function fetchFirstAttachedDocument(event: WebhookEvent, apiKey?: string) {
   const resource = event.data.resource
   const taskId = resource.taskId || (resource.type === 'task' ? resource.id || resource.taskIds?.[0] : undefined)
-  const tasks = createOneHorizonTasksClient(apiKey)
+  const documents = createOneHorizonDocumentsClient(apiKey)
 
-  if (!tasks || !taskId) {
+  if (!documents || !taskId) {
     return undefined
   }
 
-  return tasks.fetchTask({
+  const response = await documents.listDocuments({
     workspaceId: 'current',
-    taskId
+    taskId,
+    includeContent: true,
+    limit: 1
   })
+
+  return response.documents?.[0]
 }
