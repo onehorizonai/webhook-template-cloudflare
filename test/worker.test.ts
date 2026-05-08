@@ -16,13 +16,11 @@ const payload = WebhookEventToJSON({
     resource: { type: 'task', id: 'tsk_123', workspaceId: 'w_123' },
     actor: { type: 'user', id: 'usr_123' },
     task: {
-      task: {
-        taskId: 'tsk_123',
-        workspaceId: 'w_123',
-        title: 'Review launch checklist',
-        status: 'planned',
-        visibility: 'team'
-      }
+      taskId: 'tsk_123',
+      workspaceId: 'w_123',
+      title: 'Review launch checklist',
+      status: 'planned',
+      visibility: 'team'
     }
   }
 } satisfies WebhookEvent)
